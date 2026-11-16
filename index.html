@@ -10,6 +10,8 @@
 <meta property="og:description" content="استوديو أفلام وإعلانات سعودي · Saudi film & ads studio">
 <meta property="og:image" content="https://rubixr.studio/assets/og.png">
 <meta property="og:url" content="https://rubixr.studio/">
+<link rel="alternate" hreflang="ar" href="https://rubixr.studio/">
+<link rel="alternate" hreflang="en" href="https://rubixr.studio/en/">
 <meta name="theme-color" content="#2F4A3A">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -35,7 +37,8 @@
   .links a::after{content:"";position:absolute;inset-inline:0;bottom:-6px;height:1px;background:var(--sand);transform:scaleX(0);transform-origin:right;transition:transform .35s var(--ease)}
   .links a:hover{opacity:1}.links a:hover::after{transform:scaleX(1)}
   .acts{display:flex;align-items:center;gap:10px}
-  .en{font-family:"Cormorant Garamond",serif;font-size:17px;letter-spacing:1px;padding:7px 14px;border:1px solid rgba(245,241,232,.35);border-radius:999px}
+  .lang{font-family:"Cormorant Garamond",serif;font-size:17px;font-weight:500;letter-spacing:1px;padding:6px 14px;border:1px solid rgba(245,241,232,.35);border-radius:999px;transition:background .25s,color .25s}
+  .lang:hover{background:var(--cream);color:var(--green)}
   .cta{font-weight:700;font-size:15px;padding:11px 20px;border-radius:999px;background:var(--cream);color:var(--green);transition:transform .25s var(--ease),box-shadow .25s}
   .cta:hover{transform:translateY(-2px);box-shadow:0 10px 30px -10px rgba(0,0,0,.6)}
   .burger{display:none;width:42px;height:42px;border-radius:50%;border:1px solid rgba(245,241,232,.35);background:none;color:var(--cream)}
@@ -43,6 +46,7 @@
 
   .mnav{position:fixed;inset:0;z-index:19;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:0 28px;background:var(--deep);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
   .mnav a{font-size:38px;font-weight:700;padding:8px 0;border-bottom:1px solid rgba(245,241,232,.12)}
+  .mnav a[lang=en]{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:500;border-bottom:0;margin-top:14px;color:var(--sand)}
   body.menu .mnav{opacity:1;visibility:visible}
   body.menu{overflow:hidden}
   a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--sand);outline-offset:3px}
@@ -164,7 +168,8 @@
   @keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
 
   @media (max-width:860px){
-    .links,.nav .en{display:none}
+    .links{display:none}
+    .lang{padding:5px 11px;font-size:15px}
     .burger{display:block}
     .cta{padding:10px 16px;font-size:14px}
     .hero{grid-template-columns:1fr;padding-top:104px;gap:8px;text-align:right}
@@ -254,6 +259,7 @@
     <a href="#contact">تواصل</a>
   </nav>
   <div class="acts">
+    <a class="lang" href="en/" lang="en" hreflang="en">EN</a>
     <a class="cta" href="https://wa.me/966509199734?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A3%D8%A8%D9%8A%20%D9%81%D9%8A%D9%84%D9%85%20%D9%85%D9%86%20%D8%B1%D9%88%D8%A8%D9%8A%D9%83%D8%B3%D8%A7%D8%B1">اطلب فيلمك</a>
     <button class="burger" aria-label="القائمة" aria-expanded="false" aria-controls="mnav"><span></span><span></span></button>
   </div>
@@ -261,6 +267,7 @@
 
 <nav class="mnav" id="mnav" aria-label="القائمة">
   <a href="#services">خدماتنا</a><a href="#how">كيف نشتغل</a><a href="#about">من نحن</a><a href="#contact">تواصل</a>
+  <a href="en/" lang="en" hreflang="en">English</a>
 </nav>
 
 <main>
