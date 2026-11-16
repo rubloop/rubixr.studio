@@ -10,49 +10,428 @@
 <meta property="og:description" content="استوديو أفلام وإعلانات سعودي · Saudi film & ads studio">
 <meta property="og:image" content="https://rubixr.studio/assets/og.png">
 <meta property="og:url" content="https://rubixr.studio/">
+<meta name="theme-color" content="#2F4A3A">
 <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Cormorant+Garamond:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
 <style>
-  :root{--green:#2F4A3A;--cream:#F5F1E8;--sand:#C9C2B2;--ink:#1d2b22}
+  :root{--green:#2F4A3A;--deep:#1d2b22;--cream:#F5F1E8;--sand:#C9C2B2;--ease:cubic-bezier(.22,1,.36,1)}
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{background:var(--green);color:var(--cream)}
-  body{font-family:"IBM Plex Sans Arabic",Tahoma,sans-serif;min-height:100vh;display:flex;flex-direction:column}
-  main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:56px 20px 40px;gap:28px}
-  .logo{width:min(440px,82vw);height:auto;display:block}
-  h1{font-size:clamp(20px,4.4vw,28px);font-weight:600;letter-spacing:.2px}
-  .en{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(16px,3.4vw,20px);letter-spacing:3px;text-transform:uppercase;opacity:.82;direction:ltr}
-  .slogan{font-size:clamp(22px,5.4vw,36px);font-weight:700;line-height:1.5;max-width:20ch}
-  .rule{width:64px;height:2px;background:var(--sand);opacity:.6}
-  nav{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:4px}
-  nav a{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border:1px solid rgba(245,241,232,.35);border-radius:999px;color:var(--cream);text-decoration:none;font-size:15px;transition:background .2s,color .2s}
-  nav a:hover,nav a:focus-visible{background:var(--cream);color:var(--green);outline:none}
-  nav svg{width:18px;height:18px;fill:currentColor}
-  footer{padding:22px 20px 28px;text-align:center;font-size:13px;line-height:1.9;color:rgba(245,241,232,.7);border-top:1px solid rgba(245,241,232,.12)}
+  html{background:var(--deep)}
+  body{font-family:"IBM Plex Sans Arabic",Tahoma,sans-serif;color:var(--cream);background:var(--green);overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+
+  /* ── شريط التنقّل ── */
+  .nav{position:fixed;inset:0 0 auto 0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:22px clamp(18px,4vw,56px);opacity:0;transform:translateY(-12px);animation:in .9s var(--ease) 2.9s forwards}
+  .nav{transition:background .4s,padding .4s,backdrop-filter .4s}
+  .nav.scrolled{background:rgba(29,43,34,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding-block:12px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand svg{height:44px;width:auto}
+  .brand svg .character{display:none}
+  .links{display:flex;gap:clamp(18px,2.6vw,38px);font-size:15px;font-weight:500}
+  .links a{position:relative;opacity:.86;transition:opacity .25s}
+  .links a::after{content:"";position:absolute;inset-inline:0;bottom:-6px;height:1px;background:var(--sand);transform:scaleX(0);transform-origin:right;transition:transform .35s var(--ease)}
+  .links a:hover{opacity:1}.links a:hover::after{transform:scaleX(1)}
+  .acts{display:flex;align-items:center;gap:10px}
+  .en{font-family:"Cormorant Garamond",serif;font-size:17px;letter-spacing:1px;padding:7px 14px;border:1px solid rgba(245,241,232,.35);border-radius:999px}
+  .cta{font-weight:700;font-size:15px;padding:11px 20px;border-radius:999px;background:var(--cream);color:var(--green);transition:transform .25s var(--ease),box-shadow .25s}
+  .cta:hover{transform:translateY(-2px);box-shadow:0 10px 30px -10px rgba(0,0,0,.6)}
+  .burger{display:none;width:42px;height:42px;border-radius:50%;border:1px solid rgba(245,241,232,.35);background:none;color:var(--cream)}
+  .burger span{display:block;width:16px;height:1.5px;background:currentColor;margin:4px auto}
+
+  .mnav{position:fixed;inset:0;z-index:19;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:0 28px;background:var(--deep);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+  .mnav a{font-size:38px;font-weight:700;padding:8px 0;border-bottom:1px solid rgba(245,241,232,.12)}
+  body.menu .mnav{opacity:1;visibility:visible}
+  body.menu{overflow:hidden}
+  a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--sand);outline-offset:3px}
+
+  /* ── أول شاشة ── */
+  .hero{position:relative;min-height:100svh;display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:clamp(24px,4vw,64px);padding:120px clamp(18px,6vw,96px) 90px;overflow:hidden;isolation:isolate}
+  .hero::before{content:"";position:absolute;inset:-20%;z-index:-1;background:radial-gradient(60% 55% at 25% 45%,rgba(201,194,178,.16),transparent 70%)}
+  .grain{position:absolute;inset:-50%;z-index:5;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1s steps(6) infinite}
+
+  /* أشرطة السينما تنفتح */
+  .bar{position:fixed;inset-inline:0;height:50vh;background:var(--deep);z-index:30;pointer-events:none}
+  .bar.top{top:0;animation:barTop 1.25s var(--ease) .35s forwards}
+  .bar.bot{bottom:0;animation:barBot 1.25s var(--ease) .35s forwards}
+
+  .copy{position:relative;z-index:2}
+  .kicker{display:flex;align-items:center;gap:12px;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:clamp(15px,1.4vw,19px);letter-spacing:.5px;color:var(--sand);direction:ltr;justify-content:flex-end;opacity:0;animation:in .8s var(--ease) 1.9s forwards}
+  .kicker i{display:block;width:44px;height:1px;background:var(--sand)}
+  h1{margin-top:18px;font-weight:700;font-size:clamp(44px,7.4vw,118px);line-height:1.08}
+  h1 .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding:0 .04em .32em;margin-bottom:-.24em}
+  h1 .w>span{display:inline-block;transform:translateY(160%);animation:rise 1s var(--ease) forwards}
+  .slogan{margin-top:26px;font-size:clamp(20px,2.1vw,30px);font-weight:500;color:var(--sand);opacity:0;animation:in 1s var(--ease) 2.55s forwards}
+  .buttons{margin-top:38px;display:flex;flex-wrap:wrap;gap:12px;opacity:0;animation:in .9s var(--ease) 2.8s forwards}
+  .buttons .ghost{font-weight:500;font-size:15px;padding:11px 20px;border-radius:999px;border:1px solid rgba(245,241,232,.4)}
+
+  /* الشعار داخل عدسة */
+  .frame{position:relative;z-index:2;aspect-ratio:1/1;display:grid;place-items:center}
+  .frame .c{position:absolute;width:15%;height:15%;border-color:var(--sand);border-style:solid;border-width:0;opacity:0;animation:corner .7s var(--ease) 1.35s forwards}
+  .c.tr{top:0;right:0;border-top-width:2px;border-right-width:2px}
+  .c.tl{top:0;left:0;border-top-width:2px;border-left-width:2px;animation-delay:1.45s}
+  .c.br{bottom:0;right:0;border-bottom-width:2px;border-right-width:2px;animation-delay:1.55s}
+  .c.bl{bottom:0;left:0;border-bottom-width:2px;border-left-width:2px;animation-delay:1.65s}
+  .rec{position:absolute;top:6%;left:7%;display:flex;align-items:center;gap:8px;font-family:"Cormorant Garamond",serif;font-size:15px;letter-spacing:2px;color:var(--sand);direction:ltr;opacity:0;animation:in .6s ease 2.2s forwards}
+  .rec b{width:8px;height:8px;border-radius:50%;background:#c4553d;animation:blink 1.2s steps(2) 2.4s infinite}
+  .logo{width:82%;height:auto;overflow:visible}
+  .logo .a-char{transform-box:fill-box;transform-origin:50% 100%;opacity:0;animation:drop 1s var(--ease) 1.6s forwards}
+  .logo .wordmark>path{opacity:0;transform-box:fill-box;animation:letter .8s var(--ease) forwards}
+  .logo .wordmark>path:nth-of-type(1){animation-delay:1.85s}.logo .wordmark>path:nth-of-type(2){animation-delay:1.92s}.logo .wordmark>path:nth-of-type(3){animation-delay:1.99s}.logo .wordmark>path:nth-of-type(4){animation-delay:2.06s}.logo .wordmark>path:nth-of-type(5){animation-delay:2.13s}.logo .wordmark>path:nth-of-type(6){animation-delay:2.20s}
+  .logo .a-ar{opacity:0;transform:translateY(6%);transform-box:fill-box;animation:in 1s var(--ease) 2.45s forwards}
+
+  .cue{position:absolute;bottom:26px;inset-inline-start:50%;transform:translateX(50%);display:flex;flex-direction:column;align-items:center;gap:10px;font-size:13px;color:var(--sand);opacity:0;animation:in .8s ease 3.3s forwards}
+  .cue i{display:block;width:1px;height:44px;background:linear-gradient(var(--sand),transparent);transform-origin:top;animation:cue 1.8s var(--ease) 3.5s infinite}
+
+  .next{min-height:60vh;display:grid;place-items:center;background:var(--cream);color:var(--green);font-size:20px}
+
+  /* ── الأقسام ── */
+  .sec{position:relative;padding:clamp(80px,11vw,150px) clamp(18px,6vw,96px)}
+  .sec.cream{background:var(--cream);color:var(--green)}
+  .sec.deep{background:var(--deep)}
+  .eyebrow{display:flex;align-items:center;gap:12px;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:18px;color:var(--sand);direction:ltr;justify-content:flex-end}
+  .cream .eyebrow{color:#665f51}
+  .eyebrow i{display:block;width:44px;height:1px;background:currentColor}
+  h2{margin-top:14px;font-weight:700;font-size:clamp(38px,5.6vw,84px);line-height:1.1}
+  .lead{margin-top:18px;max-width:46ch;font-size:clamp(17px,1.5vw,21px);line-height:1.8;opacity:.85}
+  .draft{display:inline-block;margin-inline-start:10px;vertical-align:middle;font:500 12px/1 "IBM Plex Sans Arabic";padding:5px 9px;border-radius:999px;border:1px dashed currentColor;opacity:.6}
+  .rv{opacity:0;transform:translateY(36px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
+  .rv.on{opacity:1;transform:none}
+
+  /* خدماتنا — صفوف كبيرة مثل قائمة أفلام */
+  .svc{margin-top:56px;border-top:1px solid rgba(245,241,232,.22)}
+  .svc li{list-style:none;display:grid;grid-template-columns:90px 1fr 1.1fr;align-items:baseline;gap:24px;padding:34px 0;border-bottom:1px solid rgba(245,241,232,.22);transition:padding .4s var(--ease)}
+  .svc li:hover{padding-inline-start:14px}
+  .svc .n{font-family:"Cormorant Garamond",serif;font-size:26px;color:var(--sand);direction:ltr;text-align:right}
+  .svc h3{font-size:clamp(28px,3.4vw,50px);font-weight:700}
+  .svc p{font-size:17px;line-height:1.8;opacity:.8}
+
+  /* كيف نشتغل */
+  .steps{margin-top:56px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .step{border-top:2px solid var(--green);padding-top:22px}
+  .step .n{font-family:"Cormorant Garamond",serif;font-size:44px;line-height:1;color:#8a8372;direction:ltr;text-align:right}
+  .step h3{margin-top:14px;font-size:28px;font-weight:700}
+  .step p{margin-top:8px;font-size:16px;line-height:1.8;opacity:.8}
+
+  /* التذكرة */
+  .ticket-wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(30px,5vw,80px);align-items:center}
+  .ticket-form{margin-top:30px;display:flex;gap:10px;flex-wrap:wrap}
+  .ticket-form input{flex:1 1 220px;font:500 17px "IBM Plex Sans Arabic";padding:14px 18px;border-radius:999px;border:1px solid rgba(245,241,232,.4);background:transparent;color:var(--cream);outline:none}
+  .ticket-form input:focus{border-color:var(--cream)}
+  .ticket-form input::placeholder{color:rgba(245,241,232,.5)}
+  .ticket{position:relative;display:grid;grid-template-columns:1fr 92px;background:var(--cream);color:var(--green);border-radius:14px;box-shadow:0 30px 70px -30px rgba(0,0,0,.7);transform:rotate(-2deg);transition:transform .6s var(--ease)}
+  .ticket:hover{transform:rotate(0)}
+  .ticket .main{padding:28px 30px;border-inline-end:2px dashed rgba(47,74,58,.35)}
+  .ticket .lbl{font-family:"Cormorant Garamond",serif;font-size:15px;letter-spacing:3px;color:#665f51;direction:ltr;text-align:right}
+  .ticket .title{margin-top:14px;font-size:clamp(30px,3.4vw,46px);font-weight:700;line-height:1.15;min-height:1.2em;word-break:break-word}
+  .ticket .meta{margin-top:22px;display:flex;gap:26px;font-size:14px}
+  .ticket .meta b{display:block;font-size:12px;font-weight:500;opacity:.6;margin-bottom:4px}
+  .ticket .stub{display:grid;place-items:center;background:var(--green);color:var(--cream);border-radius:0 14px 14px 0;writing-mode:vertical-rl;font-family:"Cormorant Garamond",serif;letter-spacing:5px;font-size:17px}
+  [dir=rtl] .ticket .stub{border-radius:14px 0 0 14px}
+  .ticket::before,.ticket::after{content:"";position:absolute;inset-inline-end:80px;width:24px;height:24px;border-radius:50%;background:var(--green)}
+  .ticket::before{top:-12px}.ticket::after{bottom:-12px}
+  .send{margin-top:22px;display:inline-flex}
+  .send[aria-disabled=true]{opacity:.45;pointer-events:none}
+
+  /* من نحن */
+  .about{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,100px);align-items:end}
+  .quote{font-size:clamp(30px,3.6vw,56px);font-weight:700;line-height:1.35}
+  .quote span{color:#8a8372}
+
+  /* تواصل + الفوتر */
+  .contact h2{font-size:clamp(46px,8vw,128px)}
+  .ways{margin-top:44px;display:flex;flex-wrap:wrap;gap:12px}
+  .ways a{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;border:1px solid rgba(245,241,232,.35);font-size:16px;transition:background .25s,color .25s}
+  .ways a:hover{background:var(--cream);color:var(--green)}
+  .ways a.wa{background:var(--cream);color:var(--green);font-weight:700}
+  footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;padding:26px clamp(18px,6vw,96px) 34px;background:var(--deep);border-top:1px solid rgba(245,241,232,.1);font-size:13px;color:rgba(245,241,232,.65)}
+  footer a{text-decoration:underline;text-underline-offset:3px}
   footer span{direction:ltr;unicode-bidi:isolate}
+  .float-wa{position:fixed;bottom:22px;left:22px;z-index:25;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--cream);color:var(--green);box-shadow:0 12px 30px -10px rgba(0,0,0,.6);opacity:0;animation:in .8s var(--ease) 3.6s forwards}
+  .float-wa svg{width:26px;height:26px;fill:currentColor}
+
+  @keyframes barTop{to{transform:translateY(-100%);visibility:hidden}}
+  @keyframes barBot{to{transform:translateY(100%);visibility:hidden}}
+  @keyframes in{to{opacity:1;transform:none}}
+  @keyframes rise{to{transform:none}}
+  @keyframes corner{from{opacity:0;transform:scale(1.25)}to{opacity:1;transform:none}}
+  @keyframes drop{from{opacity:0;transform:translateY(-14%)}to{opacity:1;transform:none}}
+  @keyframes letter{from{opacity:0;transform:translateY(18%)}to{opacity:1;transform:none}}
+  @keyframes blink{50%{opacity:0}}
+  @keyframes cue{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+  @keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+
+  @media (max-width:860px){
+    .links,.nav .en{display:none}
+    .burger{display:block}
+    .cta{padding:10px 16px;font-size:14px}
+    .hero{grid-template-columns:1fr;padding-top:104px;gap:8px;text-align:right}
+    .frame{order:-1;width:min(78vw,380px);justify-self:center}
+    .kicker{justify-content:flex-end}
+    h1{font-size:clamp(40px,11.5vw,64px)}
+    .cue{display:none}
+    .svc li{grid-template-columns:44px 1fr;gap:6px 14px}
+    .svc li p{grid-column:2}
+    .steps{grid-template-columns:1fr 1fr;gap:28px 16px}
+    .ticket-wrap,.about{grid-template-columns:1fr}
+    .ticket{grid-template-columns:1fr 64px}
+    .ticket::before,.ticket::after{inset-inline-end:52px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01s!important;animation-delay:0s!important;animation-iteration-count:1!important}
+  }
 </style>
 </head>
 <body>
-<main>
-  <img class="logo" src="assets/wordmark.svg" alt="Rubixr روبيكسار" width="1080" height="632">
-  <div>
-    <h1>استوديو أفلام وإعلانات سعودي</h1>
-    <p class="en">Saudi film &amp; ads studio</p>
-  </div>
-  <div class="rule" aria-hidden="true"></div>
-  <p class="slogan">مرسومة بلهجتنا. ومحسوسة بكل لغة.</p>
-  <nav aria-label="تواصل">
-    <a href="https://wa.me/966509199734"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35M12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88a9.82 9.82 0 0 1 6.99 2.9 9.82 9.82 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.94L.06 24l6.31-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.16-3.49-8.41"/></svg>واتساب</a>
-    <a href="mailto:rubixr.studio@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h17A1.5 1.5 0 0 1 22 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18.5zm2.2.5 7.8 6.1L19.8 6zM20 7.7l-8 6.2-8-6.2V18h16z"/></svg>إيميل</a>
-    <a href="https://www.instagram.com/rubixr.studio/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.64-.07-4.85s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16M12 0C8.74 0 8.33.01 7.05.07 2.7.27.27 2.69.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.36 2.62 6.78 6.98 6.98C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c4.35-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0m0 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32M12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8m6.41-11.85a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88"/></svg>انستقرام</a>
-    <a href="https://www.tiktok.com/@rubixr.studio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07"/></svg>تيك توك</a>
+<div class="bar top" aria-hidden="true"></div>
+<div class="bar bot" aria-hidden="true"></div>
+
+<header class="nav">
+  <a class="brand" href="#" aria-label="روبيكسار">
+    <svg viewBox="60 120 1080 632" aria-hidden="true">
+  
+  
+  <g class="wordmark" transform="translate(100 201.6)">
+        <path fill="#F5F1E8"
+       d="m 8.4,158.4 q 4.2,0.2 11,0.4 6.8,0.2 13.4,0.2 9.4,0 18,-0.2 8.6,-0.2 12.2,-0.2 16.2,0 26.8,4.6 10.8,4.6 16,12.6 5.4,7.8 5.4,17.6 0,6 -2.4,12.8 -2.4,6.8 -8.4,12.8 -5.8,6 -16,10 -10.2,3.8 -25.8,3.8 H 39.4 v -4 h 17.2 q 14.2,0 21.6,-4.4 7.6,-4.6 10.2,-12 2.8,-7.6 2.8,-16.8 0,-15.8 -7.6,-24.4 -7.4,-8.8 -25.6,-8.8 -9.2,0 -12,3.4 -2.8,3.4 -2.8,13.8 v 99.2 q 0,7.2 1.2,10.8 1.2,3.6 4.6,4.8 3.6,1.2 10.4,1.6 v 4 q -4.6,-0.4 -11.6,-0.4 -6.8,-0.2 -13.8,-0.2 -7.8,0 -14.6,0.2 -6.8,0 -11,0.4 v -4 q 6.8,-0.4 10.2,-1.6 3.6,-1.2 4.8,-4.8 1.2,-3.6 1.2,-10.8 v -99.2 q 0,-7.4 -1.2,-10.8 -1.2,-3.6 -4.8,-4.8 -3.4,-1.4 -10.2,-1.6 z m 31.8,71 q 10.8,0.4 17,1 6.2,0.4 10,0.8 4,0.4 7.6,1 13.4,2.2 19.2,8.2 6,5.8 8.8,18.2 l 5,20.4 q 2,8.8 4,12.8 2.2,3.8 6.6,3.6 3.4,-0.2 5.6,-2.2 2.4,-2 5,-5.4 l 3,2.2 q -4.2,6.2 -8.8,9.6 -4.4,3.2 -12.6,3.2 -7.4,0 -13,-4.4 Q 92,294 89.2,281.2 l -4.4,-20 q -1.8,-8.6 -4.2,-14.8 -2.2,-6.4 -6.4,-10 -4,-3.6 -12,-3.6 H 40.6 Z"
+       />
+    <path fill="#F5F1E8"
+       d="m 315.60014,158.4 v 4 q -6.8,0.2 -10.4,2 -3.4,1.8 -4.6,5.8 -1.2,4 -1.2,11.4 v 60.2 q 0,14 -1.8,24.4 -1.8,10.4 -6.4,18 -5,8.4 -14.6,13.6 -9.6,5 -22,5 -9.6,0 -18.4,-2.4 -8.6,-2.2 -15.2,-8.4 -5.8,-5.6 -9.2,-11.8 -3.2,-6.2 -4.4,-15.2 -1.2,-9 -1.2,-22.6 v -62.8 q 0,-7.4 -1.2,-10.8 -1.2,-3.6 -4.8,-4.8 -3.4,-1.4 -10.2,-1.6 v -4 q 4.2,0.2 11,0.4 6.8,0.2 14.6,0.2 7,0 13.8,-0.2 7,-0.2 11.6,-0.4 v 4 q -6.8,0.2 -10.4,1.6 -3.4,1.2 -4.6,4.8 -1.2,3.4 -1.2,10.8 v 66.2 q 0,10.2 1,19.4 1,9 4,16 3.2,6.8 9.6,10.8 6.4,3.8 17,3.8 15.2,0 23.4,-6.6 8.4,-6.8 11.6,-18.6 3.4,-11.8 3.4,-26.6 v -62.4 q 0,-7.4 -1.8,-11.4 -1.6,-4 -5.6,-5.8 -4,-1.8 -10.8,-2 v -4 q 3.6,0.2 9.4,0.4 6,0.2 11,0.2 5.2,0 10.2,-0.2 5.2,-0.2 8.4,-0.4 z"
+       />
+    <path fill="#F5F1E8"
+       d="m 384.4,158.4 q 4.2,0.2 11,0.4 6.8,0.2 13.4,0.2 9.4,0 18,-0.2 8.6,-0.2 12.2,-0.2 21,0 31.6,8.8 10.6,8.8 10.6,22.6 0,7 -3,13.8 -2.8,6.6 -9.6,12.2 -6.6,5.4 -17.8,8.8 v 0.4 q 15.8,2 24.6,7.6 9,5.4 12.6,12.8 3.6,7.4 3.6,15.6 0,11.4 -5.8,20.2 -5.6,8.6 -16.4,13.6 -10.8,5 -25.8,5 -4.4,0 -13.2,-0.2 -8.8,-0.4 -21.2,-0.4 -7,0 -13.8,0.2 -6.8,0 -11,0.4 v -4 q 6.8,-0.4 10.2,-1.6 3.6,-1.2 4.8,-4.8 1.2,-3.6 1.2,-10.8 v -99.2 q 0,-7.4 -1.2,-10.8 -1.2,-3.6 -4.8,-4.8 -3.4,-1.4 -10.2,-1.6 z m 49.6,4 q -9.2,0 -12,3.4 -2.8,3.4 -2.8,13.8 v 99.2 q 0,7 1.2,10.6 1.2,3.6 4.4,4.8 3.2,1.2 9.4,1.2 19.6,0 28.4,-9 9,-9.2 9,-26 0,-15.4 -8.4,-23.8 -8.2,-8.4 -27.2,-8.4 h -20.6 q 0,0 0,-1.6 0,-1.8 0,-1.8 h 17.2 q 11.8,0 18.2,-4.4 6.4,-4.6 8.8,-12 2.4,-7.6 2.4,-16.2 0,-14.8 -6.6,-22.2 -6.4,-7.6 -21.4,-7.6 z"
+       />
+    <path fill="#F5F1E8"
+       d="m 614.99985,158.4 v 4 q -6.8,0.2 -10.4,1.6 -3.4,1.2 -4.6,4.8 -1.2,3.4 -1.2,10.8 v 99.2 q 0,7.2 1.2,10.8 1.2,3.6 4.6,4.8 3.6,1.2 10.4,1.6 v 4 q -4.6,-0.4 -11.6,-0.4 -6.8,-0.2 -13.8,-0.2 -7.8,0 -14.6,0.2 -6.8,0 -11,0.4 v -4 q 6.8,-0.4 10.2,-1.6 3.6,-1.2 4.8,-4.8 1.2,-3.6 1.2,-10.8 v -99.2 q 0,-7.4 -1.2,-10.8 -1.2,-3.6 -4.8,-4.8 -3.4,-1.4 -10.2,-1.6 v -4 q 4.2,0.2 11,0.4 6.8,0.2 14.6,0.2 7,0 13.8,-0.2 7,-0.2 11.6,-0.4 z"
+       />
+    <path fill="#F5F1E8"
+       d="m 727.19996,158.4 v 4.2 q -10,0 -12.2,2.2 -2.2,2 0.6,6.6 l 74.8,114.4 q 3.8,5.8 6.4,7.8 2.6,1.8 7,2.2 v 4.2 q -2.6,-0.2 -7.4,-0.4 -4.6,-0.4 -9.8,-0.4 -8,0 -16.2,0.4 -8,0.2 -12,0.4 v -4.2 q 10,0 12.8,-1.2 2.8,-1.2 0,-5.6 l -76,-116.4 q -3.8,-5.8 -6.4,-7.8 -2.4,-2 -7,-2.2 v -4.2 q 2.6,0.2 7.4,0.6 4.8,0.2 9.8,0.2 8.2,0 15.4,-0.2 7.2,-0.4 12.8,-0.6 z m 11,68.6 q 0,0 0.4,1.4 0.4,1.2 0.8,2.6 0.6,1.2 0.6,1.2 l -24.6,36.6 q -7.2,10.8 -7.6,16.6 -0.2,5.8 4.6,8.2 4.8,2.2 13.2,2.4 v 4 q -2.8,-0.2 -6.4,-0.2 -3.6,-0.2 -7.4,-0.2 -3.6,-0.2 -7.2,-0.2 -3.4,0 -6,0 -5,0 -9.6,0.2 -4.4,0 -7.4,0.4 v -4 q 6.2,-1 11.6,-5.6 5.4,-4.6 11,-12.8 z m 61.4,-68.6 v 4 q -6.2,0.8 -11.6,5.6 -5.4,4.6 -11,12.8 l -32.2,48 q 0,0 -0.6,-2.6 -0.6,-2.6 -0.6,-2.6 l 22.8,-34 q 7.2,-10.8 8.4,-16.6 1.2,-5.8 -2.8,-8 -4,-2.4 -12.4,-2.6 v -4 q 3.8,0.2 7.8,0.4 4,0 7.8,0.2 4,0 7.4,0 5.2,0 9.6,-0.2 4.4,-0.2 7.4,-0.4 z"
+       />
+    <path fill="#F5F1E8"
+       d="m 868.60013,158.4 q 4.2,0.2 11,0.4 6.8,0.2 13.4,0.2 9.4,0 18,-0.2 8.6,-0.2 12.2,-0.2 16.2,0 26.8,4.6 10.8,4.6 16,12.6 5.4,7.8 5.4,17.6 0,6 -2.4,12.8 -2.4,6.8 -8.4,12.8 -5.8,6 -16,10 -10.2,3.8 -25.8,3.8 h -19.2 v -4 h 17.2 q 14.2,0 21.6,-4.4 7.6,-4.6 10.2,-12 2.8,-7.6 2.8,-16.8 0,-15.8 -7.6,-24.4 -7.4,-8.8 -25.6,-8.8 -9.2,0 -12,3.4 -2.8,3.4 -2.8,13.8 v 99.2 q 0,7.2 1.2,10.8 1.2,3.6 4.6,4.8 3.6,1.2 10.4,1.6 v 4 q -4.6,-0.4 -11.6,-0.4 -6.8,-0.2 -13.8,-0.2 -7.8,0 -14.6,0.2 -6.8,0 -11,0.4 v -4 q 6.8,-0.4 10.2,-1.6 3.6,-1.2 4.8,-4.8 1.2,-3.6 1.2,-10.8 v -99.2 q 0,-7.4 -1.2,-10.8 -1.2,-3.6 -4.8,-4.8 -3.4,-1.4 -10.2,-1.6 z m 31.8,71 q 10.8,0.4 17,1 6.2,0.4 10,0.8 4,0.4 7.6,1 13.4,2.2 19.2,8.2 6,5.8 8.8,18.2 l 5,20.4 q 2,8.8 4,12.8 2.2,3.8 6.6,3.6 3.4,-0.2 5.6,-2.2 2.4,-2 5,-5.4 l 3,2.2 q -4.2,6.2 -8.8,9.6 -4.4,3.2 -12.6,3.2 -7.4,0 -13,-4.4 -5.6,-4.4 -8.4,-17.2 l -4.4,-20 q -1.8,-8.6 -4.2,-14.8 -2.2,-6.4 -6.4,-10 -4,-3.6 -12,-3.6 h -21.6 z"
+       />
+  </g>
+  <g class="a-char"><g class="character" transform="translate(505.7 76.0) scale(0.3550)">
+<g class="camera">
+<path fill="#F5F1E8" d="M474.372 231.211C482.126 230.644 503.517 233.058 510.996 234.657C539.219 240.691 558.537 266.503 564.002 293.225C570.947 280.069 579.025 272.337 593.109 266.637C604.732 261.933 614.843 263.201 626.841 265.022C635.295 266.306 640.302 266.804 648.374 270.429C663.154 277.225 674.602 289.65 680.166 304.936C685.846 320.393 684.982 340.356 677.766 355.149C668.666 373.805 657.701 381.17 638.911 387.846C645.298 395.395 646.76 399.395 646.85 409.202L646.919 479.013C646.892 489.757 646.886 500.768 646.309 511.499C645.058 534.803 622.212 532.993 605.413 532.792L584.181 532.519L476.602 531.615C443.767 531.155 415.025 538.913 418.021 494.848C418.184 492.451 417.992 488.993 417.982 486.474C413.127 484.718 412.613 484.816 411.941 479.535C404.743 480.099 391.452 480.423 384.352 480.17C384.602 473.4 385.829 465.063 386.221 457.947C387.083 442.294 386.164 429.703 383.956 414.315C389.326 415.277 394.72 416.101 400.132 416.789C401.204 416.915 409.233 417.803 409.647 417.635C410.016 416.667 409.736 415.971 409.986 415.095C410.989 411.593 414.2 413.005 416.209 411.841C416.821 407.993 415.346 403.556 415.569 399.625C416.829 377.389 432.193 375.408 449.57 375.598C385.29 345.117 397.277 237.518 474.372 231.211Z"/>
+<path fill="#2F4A3A" d="M513.875 408.99C533.938 407.397 551.467 422.428 552.954 442.498C554.441 462.569 539.318 480.019 519.24 481.4C499.311 482.771 482.019 467.785 480.543 447.863C479.067 427.942 493.962 410.571 513.875 408.99Z"/>
+<path fill="#F5F1E8" d="M513.602 429.188C515.35 430.273 516.756 432.786 517.733 434.6C529.238 455.968 498.888 477.357 487.625 453.703C485.02 448.135 484.765 441.752 486.92 435.994C488.619 431.369 492.146 427.648 496.673 425.705C501.624 423.542 504.912 424.071 509.656 425.983C512.155 426.614 512.236 426.773 513.602 429.188Z"/>
+<path fill="#2F4A3A" d="M509.656 425.983C512.155 426.614 512.236 426.773 513.602 429.188C514.094 433.478 512.314 435.977 507.129 433.85C505.125 433.029 504.688 426.744 509.254 426.433L509.656 425.983Z"/>
+<path fill="#2F4A3A" d="M509.656 425.983C512.155 426.614 512.236 426.773 513.602 429.188C511.926 428.658 512.071 428.464 510.586 427.386L509.254 426.433L509.656 425.983Z"/>
+<path fill="#2F4A3A" d="M434.951 383.224C440.669 383.03 449.32 383.57 455.224 383.808C455.936 398.058 455.541 415.657 455.547 430.057L455.378 523.904C443.273 524.236 433.324 526.425 425.381 515.387C421.76 507.875 422.985 494.954 423.119 486.135C427.5 485.662 432.993 485.345 436.559 482.348C451.952 469.406 451.047 436.733 439.851 421.502C435.589 415.704 428.695 413.531 421.98 412.798C420.852 401.206 420.024 385.581 434.951 383.224Z"/>
+<path fill="#2F4A3A" d="M472.416 375.569C451.306 373.715 433.441 363.137 422.911 344.637C395.345 296.21 426.66 236.128 482.905 233.866L482.704 234.923C480.821 235.432 478.647 236.098 476.824 236.775C459.208 243.408 444.986 256.827 437.341 274.028C428.676 293.725 428.083 316.034 435.689 336.163C442.824 354.666 454.357 367.536 472.416 375.569Z"/>
+<path fill="#2F4A3A" d="M494.531 285.714C506.996 284.242 518.287 293.177 519.718 305.647C521.149 318.118 512.177 329.378 499.701 330.768C487.285 332.151 476.089 323.23 474.664 310.818C473.24 298.406 482.123 287.18 494.531 285.714Z"/>
+<path fill="#2F4A3A" d="M623.842 309.109C634.035 306.91 644.075 313.412 646.239 323.613C648.403 333.814 641.867 343.831 631.658 345.96C621.5 348.078 611.542 341.581 609.388 331.429C607.235 321.278 613.698 311.298 623.842 309.109Z"/>
+<path fill="#2F4A3A" d="M610.247 266.45C611.518 266.195 616.998 265.511 617.645 266.295C617.175 266.932 615.587 267.071 614.907 267.224C576.837 279.388 562.576 318.954 577.948 354.461C582.604 365.215 588.717 370.885 597.019 378.72C591.142 375.96 586.507 374.082 581.278 369.879C570.409 361.142 562.982 348.343 561.108 334.502C560.45 329.641 562.788 322.994 563.709 317.931C564.424 313.997 564.153 309.84 564.683 306.505C565.78 299.597 571.366 289.787 575.753 284.476C584.418 274.146 596.819 267.666 610.247 266.45Z"/>
+<path fill="#2F4A3A" d="M610.247 266.45C611.518 266.195 616.998 265.511 617.645 266.295C617.175 266.932 615.587 267.071 614.907 267.224C613.225 266.304 612.213 266.629 610.247 266.45Z"/>
+<path fill="#2F4A3A" d="M557.168 340.308C558.166 342.496 559.808 347.466 560.91 350.103C566.509 363.493 572.997 370.494 584.795 378.437C572.123 378.491 559.114 378.196 546.398 378.116C537.132 378.249 527.864 378.282 518.597 378.214C538.508 368.763 547.868 360.046 557.168 340.308Z"/>
+<path fill="#2F4A3A" d="M414.985 416.061C438.516 416.427 436.335 449.455 433.327 465.345C432.384 470.322 430.612 475.234 427.196 479.083C424.035 482.646 420.081 482.03 415.596 482.123C415.035 481.453 415.212 481.499 415.004 480.49L415.616 479.868C418.252 479.427 424.303 478.27 425.948 476.261C431.68 469.263 432.129 456.349 432.39 448.119C432.656 439.74 430.654 424.97 422.26 420.999C420.123 419.988 415.448 418.705 414.376 417.604L414.985 416.061Z"/>
+<path fill="#808284" d="M482.905 233.866C483.787 233.564 486.593 233.172 487.22 233.787C487.126 234.523 483.275 234.835 482.704 234.923L482.905 233.866Z"/>
+<path fill="#F5F1E8" d="M319.149 378.558C322.836 378.304 327.382 378.794 330.572 380.655C347.595 390.585 363.914 403.196 380.528 413.824C384.834 439.545 383.801 457.91 380.307 483.391C374.08 487.822 361.68 494.846 354.75 499.059C347.659 503.605 340.288 507.912 333.069 512.186C325.23 517.556 312 516.166 308.491 506.21C305.248 497.009 306.79 480.877 306.806 470.821C306.846 445.749 306.839 420.88 307.037 395.833C307.105 387.101 311.226 381.779 319.149 378.558Z"/>
+<path fill="#2F4A3A" d="M322.259 381.11C327.913 382.217 331.843 384.664 332.331 390.852C332.829 397.169 332.787 403.535 332.863 409.871C332.986 422.45 333.018 435.029 332.961 447.608L332.792 481.318C332.738 487.335 332.848 493.42 332.373 499.418C331.721 507.675 329.902 511.469 321.147 512.315C316.725 511.227 312.037 508.015 311.285 503.328C310.111 496.017 310.482 487.829 310.474 480.437L310.438 444.642L310.353 414.461C310.226 401.1 306.2 385.084 322.259 381.11Z"/>
+<path fill="#F5F1E8" d="M492.795 559.121L508.164 558.94C509.366 569.563 511.208 580.826 512.775 591.456C505.013 609.973 494.703 629.738 485.862 647.931L447.361 727.795C438.983 745.26 430.706 761.886 422.894 779.667C424.405 783.498 425.424 786.949 426.388 790.931C414.686 787.305 399.964 783.92 387.873 780.73C379.012 778.49 370.187 776.111 361.401 773.595C378.154 759.262 397.209 761.997 415.856 770.897L459.38 651.231C470.238 621.12 481.362 588.796 492.795 559.121Z"/>
+<path fill="#F5F1E8" d="M541.247 558.766L548.545 558.645C547.728 576.345 546.114 594.177 547.051 611.837C547.357 617.614 547.542 623.426 547.778 629.21L550.453 692.493C551.654 721.26 552.326 752.967 554.334 781.545C558.456 785.431 561.498 788.47 565.345 792.651C550.974 792.894 536.604 793.215 522.237 793.616C515.105 793.794 504.963 793.755 498.049 794.518C500.239 791.647 501.572 790.19 504.103 787.593C516.456 777.266 529.94 774.367 545.652 777.434C542.283 760.824 540.416 745.438 537.897 728.729L526.026 649.51C521.361 618.195 517.229 590.007 509.615 558.932C520.159 558.932 530.704 558.877 541.247 558.766Z"/>
+<path fill="#F5F1E8" d="M551.565 558.537L560.508 558.439C566.07 569.634 572.224 580.691 577.973 591.818L628.933 689.966L645.352 721.518C648.241 727.047 652.494 734.681 654.857 740.189C660.506 740.999 663.563 741.731 668.549 744.395C666.589 745.869 664.518 747.191 662.463 748.528C650.027 756.617 638.091 765.464 625.59 773.453C621.427 776.113 617.653 778.948 613.342 781.558C613.565 775.472 614.516 770.994 617.257 765.517C622.535 754.97 636.424 744.098 647.473 740.504C638.537 730.004 623.855 707.766 615.323 695.684C593.815 665.23 571.3 634.436 550.046 603.859C550.078 589.381 551.173 573.281 551.565 558.537Z"/>
+<path fill="#F5F1E8" d="M478.052 536.136C513.042 535.74 548.857 535.96 583.89 536.054C583.545 542.498 583.837 546.624 580.112 551.986C575.738 555.952 571.661 555.363 565.775 555.398L514.427 555.501C505.102 555.518 495.948 555.541 486.627 555.285C475.505 554.981 477.855 544.6 478.052 536.136Z"/>
+<path fill="#F5F1E8" d="M717.549 542.584C731.454 542.718 731.435 565.311 724.197 572.615C719.599 577.254 707.807 570.612 702.302 569.861C699.47 569.475 697.016 569.509 694.125 569.518C688.474 569.488 682.718 569.58 677.059 569.621L676.983 545.568C696.917 546.738 698.973 548.244 717.549 542.584Z"/>
+<path fill="#F5F1E8" d="M648.403 488.27C652.323 488.386 657.819 487.96 661.385 489.579C671.662 494.246 663.844 535.196 668.357 546.174C669.782 549.639 672.011 551.806 675.422 553.297L675.356 564.634C672.015 564.872 668.182 564.992 664.895 564.345C662.366 563.846 659.966 562.785 658.548 560.545C652.255 550.597 659.402 508.698 654.827 503.71C653.388 502.142 650.403 502.036 648.463 501.81L648.403 488.27Z"/>
+<path fill="#F5F1E8" d="M668.489 416.115C669.417 418.462 668.948 466.667 668.922 472.662C665.13 470.736 660.979 468.082 657.3 465.851L648.694 460.926C648.768 449.797 648.544 438.677 648.65 427.526C655.349 423.874 661.964 420.07 668.489 416.115Z"/>
+</g>
+  </g></g>
+  <g class="a-ar"><g class="arabic" transform="translate(-132.14 374.66) scale(0.7406)"><path
+     d="m 1264.1001,430 q 9.6,2.6 16,2 6.2,-0.4 9.6,-3.2 3.4,-2.8 4.6,-7.2 1.4,-4.2 1.4,-9 v -72.4 l 25.4,-5.6 V 412 q 0,10.6 -4.6,17.2 -4.4,6.8 -11.6,9.8 -7.2,3.2 -15.2,3 -7.8,-0.2 -14.6,-3.4 -7,-3 -11,-8.6 z m -47.5999,-3.6 q 11.4,3 18.2,2 7,-1 10.4,-4.4 3.6,-3.2 4.6,-7.2 1.2,-3.8 1.2,-6.4 v -36 l 25.2,-7 v 38.4 q 0,11.4 -4.8,18.6 -4.8,7.2 -12.4,10.6 -7.4,3.4 -15.8,3.2 -8.2,0 -15.4,-3.2 -7.2,-3 -11.2,-8.6 z m 59.6,-59 -32.4,-32.8 q 2.6,0 7.2,-0.2 4.6,-0.2 9.6,-1 5,-1 9.2,-3.2 4.4,-2.2 6.4,-6 z m -32.4,32.6 q -9,0 -16.4,-4.4 -7.4,-4.4 -12,-11.8 -4.4,-7.6 -4.4,-16.4 0,-9.2 4.4,-16.6 4.6,-7.4 12,-11.8 7.6,-4.4 16.4,-4.4 9,0 16.2,4.4 7.4,4.4 11.8,11.8 4.4,7.4 4.4,16.6 0,9 -4.4,16.4 -4.4,7.4 -11.8,11.8 -7.2,4.4 -16.2,4.4 z m 0,-25.4 q 3.2,0 5.2,-2 2,-2.2 2,-5.2 0,-3.2 -2,-5.2 -2,-2.2 -5.2,-2.2 -3.2,0 -5.4,2.2 -2,2 -2,5.2 0,3 2,5.2 2.2,2 5.4,2 z m -86.8001,25.4 v -25.4 h 18.6 v -34.4 l 25.4,-5.6 v 60.8 q 0,2.4 -2,3.4 -2,1 -4,1.2 -2,0 -2,0 z m 20.5999,41.59992 q -4.8,0 -8.2,-3.4 -3.4,-3.4 -3.4,-8.2 0,-4.8 3.4,-8.2 3.4,-3.4 8.2,-3.4 4.8,0 8.2,3.4 3.4,3.4 3.4,8.2 0,4.8 -3.4,8.2 -3.4,3.4 -8.2,3.4 z M 1120.9003,400 v -25.4 h 44 V 400 Z m -24,0 v -25.4 h 18.6 v -34.4 l 25.4,-5.6 v 60.8 q 0,2.4 -2,3.4 -2,1 -4,1.2 -2,0 -2,0 z m 37.7999,41.59992 q -4.8,0 -8.2,-3.4 -3.4,-3.4 -3.4,-8.2 0,-4.8 3.4,-8.2 3.4,-3.4 8.2,-3.4 4.8,0 8.2,3.4 3.4,3.4 3.4,8.2 0,4.8 -3.4,8.2 -3.4,3.4 -8.2,3.4 z m -34.6,0 q -4.8,0 -8.2,-3.4 -3.4,-3.4 -3.4,-8.2 0,-4.8 3.4,-8.2 3.4,-3.4 8.2,-3.4 4.8,0 8.2,3.4 3.4,3.4 3.4,8.2 0,4.8 -3.4,8.2 -3.4,3.4 -8.2,3.4 z M 1065.7001,400 v -25.4 h 39.2 V 400 Z m -173.79995,0 15.2,-25.4 h 151.39995 q 0.2,-6.4 -3.4,-10.4 -3.4,-4.2 -14.6,-4.2 H 919.70015 l 25.6,-25.4 h 95.19995 q 14,0 22.4,4 8.6,4 13,10.6 4.6,6.6 6.2,14.6 1.6,8 1.6,16.2 0.2,8.2 0.2,15.4 0,2.4 -2,3.4 -2,1 -4,1.2 -2,0 -2,0 z m 62.8,-42.6 -14,-18.2 70.79995,-69.8 v 39 q -1.4,-2.2 -2.8,-2.2 -1.4,0 -2.6,1.2 z M 759.89999,400 v -25.4 h 18.6 v -34.4 l 25.4,-5.6 v 40 h 14.6 v -44.4 l 25.4,-5.6 v 50 h 14.6 v -54.4 l 25.4,-5.6 v 60 h 24 V 400 Z m -28.00007,0 q 0,0 -2,0 -2,-0.2 -4,-1.2 -2,-1 -2,-3.4 V 245.6 l 25.4,-5.6 v 134.6 h 18.6 V 400 Z m -75.00008,30 q 9.6,2.6 16,2 6.2,-0.4 9.6,-3.2 3.4,-2.8 4.6,-7.2 1.4,-4.2 1.4,-9 v -72.4 l 25.4,-5.6 V 412 q 0,10.6 -4.6,17.2 -4.4,6.8 -11.6,9.8 -7.2,3.2 -15.2,3 -7.8,-0.2 -14.6,-3.4 -7,-3 -11,-8.6 z"
+     id="ar"
+     style="font-weight:600;font-size:200px;font-family:'Reem Kufi';direction:rtl;text-anchor:middle;fill:#F5F1E8"
+     aria-label="روبيكسار" /></g></g>
+</svg>
+  </a>
+  <nav class="links" aria-label="الأقسام">
+    <a href="#services">خدماتنا</a>
+    <a href="#how">كيف نشتغل</a>
+    <a href="#about">من نحن</a>
+    <a href="#contact">تواصل</a>
   </nav>
+  <div class="acts">
+    <a class="cta" href="https://wa.me/966509199734?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A3%D8%A8%D9%8A%20%D9%81%D9%8A%D9%84%D9%85%20%D9%85%D9%86%20%D8%B1%D9%88%D8%A8%D9%8A%D9%83%D8%B3%D8%A7%D8%B1">اطلب فيلمك</a>
+    <button class="burger" aria-label="القائمة" aria-expanded="false" aria-controls="mnav"><span></span><span></span></button>
+  </div>
+</header>
+
+<nav class="mnav" id="mnav" aria-label="القائمة">
+  <a href="#services">خدماتنا</a><a href="#how">كيف نشتغل</a><a href="#about">من نحن</a><a href="#contact">تواصل</a>
+</nav>
+
+<main>
+  <section class="hero">
+    <div class="grain" aria-hidden="true"></div>
+    <div class="copy">
+      <p class="kicker" lang="en"><i></i>Rubixr Studio — Riyadh</p>
+      <h1><span class="w"><span style="animation-delay:1.70s">استوديو</span></span> <span class="w"><span style="animation-delay:1.83s">أفلام</span></span> <span class="w"><span style="animation-delay:1.96s">وإعلانات</span></span> <span class="w"><span style="animation-delay:2.09s">سعودي</span></span></h1>
+      <p class="slogan">مرسومة بلهجتنا. ومحسوسة بكل لغة.</p>
+      <div class="buttons">
+        <a class="cta" href="https://wa.me/966509199734">اطلب فيلمك</a>
+        <a class="ghost" href="#services">شوف خدماتنا</a>
+      </div>
+    </div>
+    <div class="frame" aria-hidden="true">
+      <span class="c tr"></span><span class="c tl"></span><span class="c br"></span><span class="c bl"></span>
+      <span class="rec"><b></b>REC</span>
+      <svg class="logo" viewBox="60 120 1080 632">
+  
+  
+  <g class="wordmark" transform="translate(100 201.6)">
+        <path fill="#F5F1E8"
+       d="m 8.4,158.4 q 4.2,0.2 11,0.4 6.8,0.2 13.4,0.2 9.4,0 18,-0.2 8.6,-0.2 12.2,-0.2 16.2,0 26.8,4.6 10.8,4.6 16,12.6 5.4,7.8 5.4,17.6 0,6 -2.4,12.8 -2.4,6.8 -8.4,12.8 -5.8,6 -16,10 -10.2,3.8 -25.8,3.8 H 39.4 v -4 h 17.2 q 14.2,0 21.6,-4.4 7.6,-4.6 10.2,-12 2.8,-7.6 2.8,-16.8 0,-15.8 -7.6,-24.4 -7.4,-8.8 -25.6,-8.8 -9.2,0 -12,3.4 -2.8,3.4 -2.8,13.8 v 99.2 q 0,7.2 1.2,10.8 1.2,3.6 4.6,4.8 3.6,1.2 10.4,1.6 v 4 q -4.6,-0.4 -11.6,-0.4 -6.8,-0.2 -13.8,-0.2 -7.8,0 -14.6,0.2 -6.8,0 -11,0.4 v -4 q 6.8,-0.4 10.2,-1.6 3.6,-1.2 4.8,-4.8 1.2,-3.6 1.2,-10.8 v -99.2 q 0,-7.4 -1.2,-10.8 -1.2,-3.6 -4.8,-4.8 -3.4,-1.4 -10.2,-1.6 z m 31.8,71 q 10.8,0.4 17,1 6.2,0.4 10,0.8 4,0.4 7.6,1 13.4,2.2 19.2,8.2 6,5.8 8.8,18.2 l 5,20.4 q 2,8.8 4,12.8 2.2,3.8 6.6,3.6 3.4,-0.2 5.6,-2.2 2.4,-2 5,-5.4 l 3,2.2 q -4.2,6.2 -8.8,9.6 -4.4,3.2 -12.6,3.2 -7.4,0 -13,-4.4 Q 92,294 89.2,281.2 l -4.4,-20 q -1.8,-8.6 -4.2,-14.8 -2.2,-6.4 -6.4,-10 -4,-3.6 -12,-3.6 H 40.6 Z"
+       />
+    <path fill="#F5F1E8"
+       d="m 315.60014,158.4 v 4 q -6.8,0.2 -10.4,2 -3.4,1.8 -4.6,5.8 -1.2,4 -1.2,11.4 v 60.2 q 0,14 -1.8,24.4 -1.8,10.4 -6.4,18 -5,8.4 -14.6,13.6 -9.6,5 -22,5 -9.6,0 -18.4,-2.4 -8.6,-2.2 -15.2,-8.4 -5.8,-5.6 -9.2,-11.8 -3.2,-6.2 -4.4,-15.2 -1.2,-9 -1.2,-22.6 v -62.8 q 0,-7.4 -1.2,-10.8 -1.2,-3.6 -4.8,-4.8 -3.4,-1.4 -10.2,-1.6 v -4 q 4.2,0.2 11,0.4 6.8,0.2 14.6,0.2 7,0 13.8,-0.2 7,-0.2 11.6,-0.4 v 4 q -6.8,0.2 -10.4,1.6 -3.4,1.2 -4.6,4.8 -1.2,3.4 -1.2,10.8 v 66.2 q 0,10.2 1,19.4 1,9 4,16 3.2,6.8 9.6,10.8 6.4,3.8 17,3.8 15.2,0 23.4,-6.6 8.4,-6.8 11.6,-18.6 3.4,-11.8 3.4,-26.6 v -62.4 q 0,-7.4 -1.8,-11.4 -1.6,-4 -5.6,-5.8 -4,-1.8 -10.8,-2 v -4 q 3.6,0.2 9.4,0.4 6,0.2 11,0.2 5.2,0 10.2,-0.2 5.2,-0.2 8.4,-0.4 z"
+       />
+    <path fill="#F5F1E8"
+       d="m 384.4,158.4 q 4.2,0.2 11,0.4 6.8,0.2 13.4,0.2 9.4,0 18,-0.2 8.6,-0.2 12.2,-0.2 21,0 31.6,8.8 10.6,8.8 10.6,22.6 0,7 -3,13.8 -2.8,6.6 -9.6,12.2 -6.6,5.4 -17.8,8.8 v 0.4 q 15.8,2 24.6,7.6 9,5.4 12.6,12.8 3.6,7.4 3.6,15.6 0,11.4 -5.8,20.2 -5.6,8.6 -16.4,13.6 -10.8,5 -25.8,5 -4.4,0 -13.2,-0.2 -8.8,-0.4 -21.2,-0.4 -7,0 -13.8,0.2 -6.8,0 -11,0.4 v -4 q 6.8,-0.4 10.2,-1.6 3.6,-1.2 4.8,-4.8 1.2,-3.6 1.2,-10.8 v -99.2 q 0,-7.4 -1.2,-10.8 -1.2,-3.6 -4.8,-4.8 -3.4,-1.4 -10.2,-1.6 z m 49.6,4 q -9.2,0 -12,3.4 -2.8,3.4 -2.8,13.8 v 99.2 q 0,7 1.2,10.6 1.2,3.6 4.4,4.8 3.2,1.2 9.4,1.2 19.6,0 28.4,-9 9,-9.2 9,-26 0,-15.4 -8.4,-23.8 -8.2,-8.4 -27.2,-8.4 h -20.6 q 0,0 0,-1.6 0,-1.8 0,-1.8 h 17.2 q 11.8,0 18.2,-4.4 6.4,-4.6 8.8,-12 2.4,-7.6 2.4,-16.2 0,-14.8 -6.6,-22.2 -6.4,-7.6 -21.4,-7.6 z"
+       />
+    <path fill="#F5F1E8"
+       d="m 614.99985,158.4 v 4 q -6.8,0.2 -10.4,1.6 -3.4,1.2 -4.6,4.8 -1.2,3.4 -1.2,10.8 v 99.2 q 0,7.2 1.2,10.8 1.2,3.6 4.6,4.8 3.6,1.2 10.4,1.6 v 4 q -4.6,-0.4 -11.6,-0.4 -6.8,-0.2 -13.8,-0.2 -7.8,0 -14.6,0.2 -6.8,0 -11,0.4 v -4 q 6.8,-0.4 10.2,-1.6 3.6,-1.2 4.8,-4.8 1.2,-3.6 1.2,-10.8 v -99.2 q 0,-7.4 -1.2,-10.8 -1.2,-3.6 -4.8,-4.8 -3.4,-1.4 -10.2,-1.6 v -4 q 4.2,0.2 11,0.4 6.8,0.2 14.6,0.2 7,0 13.8,-0.2 7,-0.2 11.6,-0.4 z"
+       />
+    <path fill="#F5F1E8"
+       d="m 727.19996,158.4 v 4.2 q -10,0 -12.2,2.2 -2.2,2 0.6,6.6 l 74.8,114.4 q 3.8,5.8 6.4,7.8 2.6,1.8 7,2.2 v 4.2 q -2.6,-0.2 -7.4,-0.4 -4.6,-0.4 -9.8,-0.4 -8,0 -16.2,0.4 -8,0.2 -12,0.4 v -4.2 q 10,0 12.8,-1.2 2.8,-1.2 0,-5.6 l -76,-116.4 q -3.8,-5.8 -6.4,-7.8 -2.4,-2 -7,-2.2 v -4.2 q 2.6,0.2 7.4,0.6 4.8,0.2 9.8,0.2 8.2,0 15.4,-0.2 7.2,-0.4 12.8,-0.6 z m 11,68.6 q 0,0 0.4,1.4 0.4,1.2 0.8,2.6 0.6,1.2 0.6,1.2 l -24.6,36.6 q -7.2,10.8 -7.6,16.6 -0.2,5.8 4.6,8.2 4.8,2.2 13.2,2.4 v 4 q -2.8,-0.2 -6.4,-0.2 -3.6,-0.2 -7.4,-0.2 -3.6,-0.2 -7.2,-0.2 -3.4,0 -6,0 -5,0 -9.6,0.2 -4.4,0 -7.4,0.4 v -4 q 6.2,-1 11.6,-5.6 5.4,-4.6 11,-12.8 z m 61.4,-68.6 v 4 q -6.2,0.8 -11.6,5.6 -5.4,4.6 -11,12.8 l -32.2,48 q 0,0 -0.6,-2.6 -0.6,-2.6 -0.6,-2.6 l 22.8,-34 q 7.2,-10.8 8.4,-16.6 1.2,-5.8 -2.8,-8 -4,-2.4 -12.4,-2.6 v -4 q 3.8,0.2 7.8,0.4 4,0 7.8,0.2 4,0 7.4,0 5.2,0 9.6,-0.2 4.4,-0.2 7.4,-0.4 z"
+       />
+    <path fill="#F5F1E8"
+       d="m 868.60013,158.4 q 4.2,0.2 11,0.4 6.8,0.2 13.4,0.2 9.4,0 18,-0.2 8.6,-0.2 12.2,-0.2 16.2,0 26.8,4.6 10.8,4.6 16,12.6 5.4,7.8 5.4,17.6 0,6 -2.4,12.8 -2.4,6.8 -8.4,12.8 -5.8,6 -16,10 -10.2,3.8 -25.8,3.8 h -19.2 v -4 h 17.2 q 14.2,0 21.6,-4.4 7.6,-4.6 10.2,-12 2.8,-7.6 2.8,-16.8 0,-15.8 -7.6,-24.4 -7.4,-8.8 -25.6,-8.8 -9.2,0 -12,3.4 -2.8,3.4 -2.8,13.8 v 99.2 q 0,7.2 1.2,10.8 1.2,3.6 4.6,4.8 3.6,1.2 10.4,1.6 v 4 q -4.6,-0.4 -11.6,-0.4 -6.8,-0.2 -13.8,-0.2 -7.8,0 -14.6,0.2 -6.8,0 -11,0.4 v -4 q 6.8,-0.4 10.2,-1.6 3.6,-1.2 4.8,-4.8 1.2,-3.6 1.2,-10.8 v -99.2 q 0,-7.4 -1.2,-10.8 -1.2,-3.6 -4.8,-4.8 -3.4,-1.4 -10.2,-1.6 z m 31.8,71 q 10.8,0.4 17,1 6.2,0.4 10,0.8 4,0.4 7.6,1 13.4,2.2 19.2,8.2 6,5.8 8.8,18.2 l 5,20.4 q 2,8.8 4,12.8 2.2,3.8 6.6,3.6 3.4,-0.2 5.6,-2.2 2.4,-2 5,-5.4 l 3,2.2 q -4.2,6.2 -8.8,9.6 -4.4,3.2 -12.6,3.2 -7.4,0 -13,-4.4 -5.6,-4.4 -8.4,-17.2 l -4.4,-20 q -1.8,-8.6 -4.2,-14.8 -2.2,-6.4 -6.4,-10 -4,-3.6 -12,-3.6 h -21.6 z"
+       />
+  </g>
+  <g class="a-char"><g class="character" transform="translate(505.7 76.0) scale(0.3550)">
+<g class="camera">
+<path fill="#F5F1E8" d="M474.372 231.211C482.126 230.644 503.517 233.058 510.996 234.657C539.219 240.691 558.537 266.503 564.002 293.225C570.947 280.069 579.025 272.337 593.109 266.637C604.732 261.933 614.843 263.201 626.841 265.022C635.295 266.306 640.302 266.804 648.374 270.429C663.154 277.225 674.602 289.65 680.166 304.936C685.846 320.393 684.982 340.356 677.766 355.149C668.666 373.805 657.701 381.17 638.911 387.846C645.298 395.395 646.76 399.395 646.85 409.202L646.919 479.013C646.892 489.757 646.886 500.768 646.309 511.499C645.058 534.803 622.212 532.993 605.413 532.792L584.181 532.519L476.602 531.615C443.767 531.155 415.025 538.913 418.021 494.848C418.184 492.451 417.992 488.993 417.982 486.474C413.127 484.718 412.613 484.816 411.941 479.535C404.743 480.099 391.452 480.423 384.352 480.17C384.602 473.4 385.829 465.063 386.221 457.947C387.083 442.294 386.164 429.703 383.956 414.315C389.326 415.277 394.72 416.101 400.132 416.789C401.204 416.915 409.233 417.803 409.647 417.635C410.016 416.667 409.736 415.971 409.986 415.095C410.989 411.593 414.2 413.005 416.209 411.841C416.821 407.993 415.346 403.556 415.569 399.625C416.829 377.389 432.193 375.408 449.57 375.598C385.29 345.117 397.277 237.518 474.372 231.211Z"/>
+<path fill="#2F4A3A" d="M513.875 408.99C533.938 407.397 551.467 422.428 552.954 442.498C554.441 462.569 539.318 480.019 519.24 481.4C499.311 482.771 482.019 467.785 480.543 447.863C479.067 427.942 493.962 410.571 513.875 408.99Z"/>
+<path fill="#F5F1E8" d="M513.602 429.188C515.35 430.273 516.756 432.786 517.733 434.6C529.238 455.968 498.888 477.357 487.625 453.703C485.02 448.135 484.765 441.752 486.92 435.994C488.619 431.369 492.146 427.648 496.673 425.705C501.624 423.542 504.912 424.071 509.656 425.983C512.155 426.614 512.236 426.773 513.602 429.188Z"/>
+<path fill="#2F4A3A" d="M509.656 425.983C512.155 426.614 512.236 426.773 513.602 429.188C514.094 433.478 512.314 435.977 507.129 433.85C505.125 433.029 504.688 426.744 509.254 426.433L509.656 425.983Z"/>
+<path fill="#2F4A3A" d="M509.656 425.983C512.155 426.614 512.236 426.773 513.602 429.188C511.926 428.658 512.071 428.464 510.586 427.386L509.254 426.433L509.656 425.983Z"/>
+<path fill="#2F4A3A" d="M434.951 383.224C440.669 383.03 449.32 383.57 455.224 383.808C455.936 398.058 455.541 415.657 455.547 430.057L455.378 523.904C443.273 524.236 433.324 526.425 425.381 515.387C421.76 507.875 422.985 494.954 423.119 486.135C427.5 485.662 432.993 485.345 436.559 482.348C451.952 469.406 451.047 436.733 439.851 421.502C435.589 415.704 428.695 413.531 421.98 412.798C420.852 401.206 420.024 385.581 434.951 383.224Z"/>
+<path fill="#2F4A3A" d="M472.416 375.569C451.306 373.715 433.441 363.137 422.911 344.637C395.345 296.21 426.66 236.128 482.905 233.866L482.704 234.923C480.821 235.432 478.647 236.098 476.824 236.775C459.208 243.408 444.986 256.827 437.341 274.028C428.676 293.725 428.083 316.034 435.689 336.163C442.824 354.666 454.357 367.536 472.416 375.569Z"/>
+<path fill="#2F4A3A" d="M494.531 285.714C506.996 284.242 518.287 293.177 519.718 305.647C521.149 318.118 512.177 329.378 499.701 330.768C487.285 332.151 476.089 323.23 474.664 310.818C473.24 298.406 482.123 287.18 494.531 285.714Z"/>
+<path fill="#2F4A3A" d="M623.842 309.109C634.035 306.91 644.075 313.412 646.239 323.613C648.403 333.814 641.867 343.831 631.658 345.96C621.5 348.078 611.542 341.581 609.388 331.429C607.235 321.278 613.698 311.298 623.842 309.109Z"/>
+<path fill="#2F4A3A" d="M610.247 266.45C611.518 266.195 616.998 265.511 617.645 266.295C617.175 266.932 615.587 267.071 614.907 267.224C576.837 279.388 562.576 318.954 577.948 354.461C582.604 365.215 588.717 370.885 597.019 378.72C591.142 375.96 586.507 374.082 581.278 369.879C570.409 361.142 562.982 348.343 561.108 334.502C560.45 329.641 562.788 322.994 563.709 317.931C564.424 313.997 564.153 309.84 564.683 306.505C565.78 299.597 571.366 289.787 575.753 284.476C584.418 274.146 596.819 267.666 610.247 266.45Z"/>
+<path fill="#2F4A3A" d="M610.247 266.45C611.518 266.195 616.998 265.511 617.645 266.295C617.175 266.932 615.587 267.071 614.907 267.224C613.225 266.304 612.213 266.629 610.247 266.45Z"/>
+<path fill="#2F4A3A" d="M557.168 340.308C558.166 342.496 559.808 347.466 560.91 350.103C566.509 363.493 572.997 370.494 584.795 378.437C572.123 378.491 559.114 378.196 546.398 378.116C537.132 378.249 527.864 378.282 518.597 378.214C538.508 368.763 547.868 360.046 557.168 340.308Z"/>
+<path fill="#2F4A3A" d="M414.985 416.061C438.516 416.427 436.335 449.455 433.327 465.345C432.384 470.322 430.612 475.234 427.196 479.083C424.035 482.646 420.081 482.03 415.596 482.123C415.035 481.453 415.212 481.499 415.004 480.49L415.616 479.868C418.252 479.427 424.303 478.27 425.948 476.261C431.68 469.263 432.129 456.349 432.39 448.119C432.656 439.74 430.654 424.97 422.26 420.999C420.123 419.988 415.448 418.705 414.376 417.604L414.985 416.061Z"/>
+<path fill="#808284" d="M482.905 233.866C483.787 233.564 486.593 233.172 487.22 233.787C487.126 234.523 483.275 234.835 482.704 234.923L482.905 233.866Z"/>
+<path fill="#F5F1E8" d="M319.149 378.558C322.836 378.304 327.382 378.794 330.572 380.655C347.595 390.585 363.914 403.196 380.528 413.824C384.834 439.545 383.801 457.91 380.307 483.391C374.08 487.822 361.68 494.846 354.75 499.059C347.659 503.605 340.288 507.912 333.069 512.186C325.23 517.556 312 516.166 308.491 506.21C305.248 497.009 306.79 480.877 306.806 470.821C306.846 445.749 306.839 420.88 307.037 395.833C307.105 387.101 311.226 381.779 319.149 378.558Z"/>
+<path fill="#2F4A3A" d="M322.259 381.11C327.913 382.217 331.843 384.664 332.331 390.852C332.829 397.169 332.787 403.535 332.863 409.871C332.986 422.45 333.018 435.029 332.961 447.608L332.792 481.318C332.738 487.335 332.848 493.42 332.373 499.418C331.721 507.675 329.902 511.469 321.147 512.315C316.725 511.227 312.037 508.015 311.285 503.328C310.111 496.017 310.482 487.829 310.474 480.437L310.438 444.642L310.353 414.461C310.226 401.1 306.2 385.084 322.259 381.11Z"/>
+<path fill="#F5F1E8" d="M492.795 559.121L508.164 558.94C509.366 569.563 511.208 580.826 512.775 591.456C505.013 609.973 494.703 629.738 485.862 647.931L447.361 727.795C438.983 745.26 430.706 761.886 422.894 779.667C424.405 783.498 425.424 786.949 426.388 790.931C414.686 787.305 399.964 783.92 387.873 780.73C379.012 778.49 370.187 776.111 361.401 773.595C378.154 759.262 397.209 761.997 415.856 770.897L459.38 651.231C470.238 621.12 481.362 588.796 492.795 559.121Z"/>
+<path fill="#F5F1E8" d="M541.247 558.766L548.545 558.645C547.728 576.345 546.114 594.177 547.051 611.837C547.357 617.614 547.542 623.426 547.778 629.21L550.453 692.493C551.654 721.26 552.326 752.967 554.334 781.545C558.456 785.431 561.498 788.47 565.345 792.651C550.974 792.894 536.604 793.215 522.237 793.616C515.105 793.794 504.963 793.755 498.049 794.518C500.239 791.647 501.572 790.19 504.103 787.593C516.456 777.266 529.94 774.367 545.652 777.434C542.283 760.824 540.416 745.438 537.897 728.729L526.026 649.51C521.361 618.195 517.229 590.007 509.615 558.932C520.159 558.932 530.704 558.877 541.247 558.766Z"/>
+<path fill="#F5F1E8" d="M551.565 558.537L560.508 558.439C566.07 569.634 572.224 580.691 577.973 591.818L628.933 689.966L645.352 721.518C648.241 727.047 652.494 734.681 654.857 740.189C660.506 740.999 663.563 741.731 668.549 744.395C666.589 745.869 664.518 747.191 662.463 748.528C650.027 756.617 638.091 765.464 625.59 773.453C621.427 776.113 617.653 778.948 613.342 781.558C613.565 775.472 614.516 770.994 617.257 765.517C622.535 754.97 636.424 744.098 647.473 740.504C638.537 730.004 623.855 707.766 615.323 695.684C593.815 665.23 571.3 634.436 550.046 603.859C550.078 589.381 551.173 573.281 551.565 558.537Z"/>
+<path fill="#F5F1E8" d="M478.052 536.136C513.042 535.74 548.857 535.96 583.89 536.054C583.545 542.498 583.837 546.624 580.112 551.986C575.738 555.952 571.661 555.363 565.775 555.398L514.427 555.501C505.102 555.518 495.948 555.541 486.627 555.285C475.505 554.981 477.855 544.6 478.052 536.136Z"/>
+<path fill="#F5F1E8" d="M717.549 542.584C731.454 542.718 731.435 565.311 724.197 572.615C719.599 577.254 707.807 570.612 702.302 569.861C699.47 569.475 697.016 569.509 694.125 569.518C688.474 569.488 682.718 569.58 677.059 569.621L676.983 545.568C696.917 546.738 698.973 548.244 717.549 542.584Z"/>
+<path fill="#F5F1E8" d="M648.403 488.27C652.323 488.386 657.819 487.96 661.385 489.579C671.662 494.246 663.844 535.196 668.357 546.174C669.782 549.639 672.011 551.806 675.422 553.297L675.356 564.634C672.015 564.872 668.182 564.992 664.895 564.345C662.366 563.846 659.966 562.785 658.548 560.545C652.255 550.597 659.402 508.698 654.827 503.71C653.388 502.142 650.403 502.036 648.463 501.81L648.403 488.27Z"/>
+<path fill="#F5F1E8" d="M668.489 416.115C669.417 418.462 668.948 466.667 668.922 472.662C665.13 470.736 660.979 468.082 657.3 465.851L648.694 460.926C648.768 449.797 648.544 438.677 648.65 427.526C655.349 423.874 661.964 420.07 668.489 416.115Z"/>
+</g>
+  </g></g>
+  <g class="a-ar"><g class="arabic" transform="translate(-132.14 374.66) scale(0.7406)"><path
+     d="m 1264.1001,430 q 9.6,2.6 16,2 6.2,-0.4 9.6,-3.2 3.4,-2.8 4.6,-7.2 1.4,-4.2 1.4,-9 v -72.4 l 25.4,-5.6 V 412 q 0,10.6 -4.6,17.2 -4.4,6.8 -11.6,9.8 -7.2,3.2 -15.2,3 -7.8,-0.2 -14.6,-3.4 -7,-3 -11,-8.6 z m -47.5999,-3.6 q 11.4,3 18.2,2 7,-1 10.4,-4.4 3.6,-3.2 4.6,-7.2 1.2,-3.8 1.2,-6.4 v -36 l 25.2,-7 v 38.4 q 0,11.4 -4.8,18.6 -4.8,7.2 -12.4,10.6 -7.4,3.4 -15.8,3.2 -8.2,0 -15.4,-3.2 -7.2,-3 -11.2,-8.6 z m 59.6,-59 -32.4,-32.8 q 2.6,0 7.2,-0.2 4.6,-0.2 9.6,-1 5,-1 9.2,-3.2 4.4,-2.2 6.4,-6 z m -32.4,32.6 q -9,0 -16.4,-4.4 -7.4,-4.4 -12,-11.8 -4.4,-7.6 -4.4,-16.4 0,-9.2 4.4,-16.6 4.6,-7.4 12,-11.8 7.6,-4.4 16.4,-4.4 9,0 16.2,4.4 7.4,4.4 11.8,11.8 4.4,7.4 4.4,16.6 0,9 -4.4,16.4 -4.4,7.4 -11.8,11.8 -7.2,4.4 -16.2,4.4 z m 0,-25.4 q 3.2,0 5.2,-2 2,-2.2 2,-5.2 0,-3.2 -2,-5.2 -2,-2.2 -5.2,-2.2 -3.2,0 -5.4,2.2 -2,2 -2,5.2 0,3 2,5.2 2.2,2 5.4,2 z m -86.8001,25.4 v -25.4 h 18.6 v -34.4 l 25.4,-5.6 v 60.8 q 0,2.4 -2,3.4 -2,1 -4,1.2 -2,0 -2,0 z m 20.5999,41.59992 q -4.8,0 -8.2,-3.4 -3.4,-3.4 -3.4,-8.2 0,-4.8 3.4,-8.2 3.4,-3.4 8.2,-3.4 4.8,0 8.2,3.4 3.4,3.4 3.4,8.2 0,4.8 -3.4,8.2 -3.4,3.4 -8.2,3.4 z M 1120.9003,400 v -25.4 h 44 V 400 Z m -24,0 v -25.4 h 18.6 v -34.4 l 25.4,-5.6 v 60.8 q 0,2.4 -2,3.4 -2,1 -4,1.2 -2,0 -2,0 z m 37.7999,41.59992 q -4.8,0 -8.2,-3.4 -3.4,-3.4 -3.4,-8.2 0,-4.8 3.4,-8.2 3.4,-3.4 8.2,-3.4 4.8,0 8.2,3.4 3.4,3.4 3.4,8.2 0,4.8 -3.4,8.2 -3.4,3.4 -8.2,3.4 z m -34.6,0 q -4.8,0 -8.2,-3.4 -3.4,-3.4 -3.4,-8.2 0,-4.8 3.4,-8.2 3.4,-3.4 8.2,-3.4 4.8,0 8.2,3.4 3.4,3.4 3.4,8.2 0,4.8 -3.4,8.2 -3.4,3.4 -8.2,3.4 z M 1065.7001,400 v -25.4 h 39.2 V 400 Z m -173.79995,0 15.2,-25.4 h 151.39995 q 0.2,-6.4 -3.4,-10.4 -3.4,-4.2 -14.6,-4.2 H 919.70015 l 25.6,-25.4 h 95.19995 q 14,0 22.4,4 8.6,4 13,10.6 4.6,6.6 6.2,14.6 1.6,8 1.6,16.2 0.2,8.2 0.2,15.4 0,2.4 -2,3.4 -2,1 -4,1.2 -2,0 -2,0 z m 62.8,-42.6 -14,-18.2 70.79995,-69.8 v 39 q -1.4,-2.2 -2.8,-2.2 -1.4,0 -2.6,1.2 z M 759.89999,400 v -25.4 h 18.6 v -34.4 l 25.4,-5.6 v 40 h 14.6 v -44.4 l 25.4,-5.6 v 50 h 14.6 v -54.4 l 25.4,-5.6 v 60 h 24 V 400 Z m -28.00007,0 q 0,0 -2,0 -2,-0.2 -4,-1.2 -2,-1 -2,-3.4 V 245.6 l 25.4,-5.6 v 134.6 h 18.6 V 400 Z m -75.00008,30 q 9.6,2.6 16,2 6.2,-0.4 9.6,-3.2 3.4,-2.8 4.6,-7.2 1.4,-4.2 1.4,-9 v -72.4 l 25.4,-5.6 V 412 q 0,10.6 -4.6,17.2 -4.4,6.8 -11.6,9.8 -7.2,3.2 -15.2,3 -7.8,-0.2 -14.6,-3.4 -7,-3 -11,-8.6 z"
+     id="ar"
+     style="font-weight:600;font-size:200px;font-family:'Reem Kufi';direction:rtl;text-anchor:middle;fill:#F5F1E8"
+     aria-label="روبيكسار" /></g></g>
+</svg>
+    </div>
+    <a class="cue" href="#services"><span>انزل</span><i></i></a>
+  </section>
+  <section class="sec deep" id="services">
+    <p class="eyebrow rv" lang="en"><i></i>What we make</p>
+    <h2 class="rv">خدماتنا</h2>
+    <ul class="svc">
+      <li class="rv"><span class="n">01</span><h3>أفلام</h3><p>أفلام قصيرة بحكايات من عندنا، بلهجة سعودية وترجمة إنجليزية.</p></li>
+      <li class="rv"><span class="n">02</span><h3>إعلانات</h3><p>إعلانات للشركات والمحلات، مرسومة أو واقعية، تحكي منتجك كقصة.</p></li>
+      <li class="rv"><span class="n">03</span><h3>شخصيات ورسوم متحركة</h3><p>شخصية لعلامتك ترسمها وتحرّكها، وتصير وجهها بكل مكان.</p></li>
+    </ul>
+  </section>
+
+  <section class="sec cream" id="how">
+    <p class="eyebrow rv" lang="en"><i></i>How we work</p>
+    <h2 class="rv">كيف نشتغل</h2>
+    <div class="steps">
+      <div class="step rv"><div class="n">01</div><h3>نسمع</h3><p>جلسة نفهم فيها وش تبي ومين جمهورك.</p></div>
+      <div class="step rv"><div class="n">02</div><h3>نكتب</h3><p>الفكرة والحكاية والمدة، على ورق قبل أي رسم.</p></div>
+      <div class="step rv"><div class="n">03</div><h3>نرسم</h3><p>الشخصيات والمشاهد والصوت، خطوة خطوة.</p></div>
+      <div class="step rv"><div class="n">04</div><h3>نسلّم</h3><p>نسخة لكل منصة، وجولة تعديل معك.</p></div>
+    </div>
+  </section>
+
+  <section class="sec" id="ticket">
+    <div class="ticket-wrap">
+      <div>
+        <p class="eyebrow rv" lang="en"><i></i>Now booking</p>
+        <h2 class="rv">فيلمك الجاي يبدأ من هنا</h2>
+        <p class="lead rv">اكتب اسم مشروعك، وخذ تذكرته، وأرسلها لنا.</p>
+        <form class="ticket-form rv" onsubmit="return false">
+          <input id="pname" maxlength="40" placeholder="اسم مشروعك" aria-label="اسم مشروعك" autocomplete="off">
+        </form>
+        <a class="cta send" id="send" aria-disabled="true" href="#">أرسل التذكرة بالواتساب</a>
+      </div>
+      <div class="ticket rv" aria-live="polite">
+        <div class="main">
+          <div class="lbl">RUBIXR STUDIO</div>
+          <div class="title" id="ttitle">اسم مشروعك</div>
+          <div class="meta"><div><b>إنتاج</b>روبيكسار</div><div><b>العرض</b>قريباً</div><div><b>المقعد</b><span id="seat">A1</span></div></div>
+        </div>
+        <div class="stub">ADMIT ONE</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec cream" id="about">
+    <div class="about">
+      <div>
+        <p class="eyebrow rv" lang="en"><i></i>About the studio</p>
+        <h2 class="rv">من نحن</h2>
+        <p class="lead rv">روبيكسار استوديو أفلام وإعلانات سعودي من الرياض. نكتب حكاياتنا بلهجتنا، ونترجمها عشان توصل لكل لغة.</p>
+      </div>
+      <p class="quote rv">مرسومة بلهجتنا.<br><span>ومحسوسة بكل لغة.</span></p>
+    </div>
+  </section>
+
+  <section class="sec contact" id="contact">
+    <p class="eyebrow rv" lang="en"><i></i>Get in touch</p>
+    <h2 class="rv">نبدأ؟</h2>
+    <div class="ways rv">
+      <a class="wa" href="https://wa.me/966509199734">واتساب</a>
+      <a href="mailto:rubixr.studio@gmail.com">rubixr.studio@gmail.com</a>
+      <a href="https://www.instagram.com/rubixr.studio/">انستقرام</a>
+      <a href="https://www.tiktok.com/@rubixr.studio">تيك توك</a>
+    </div>
+  </section>
 </main>
+
 <footer>
-  مؤسسة روبيكسآر · <span>Rubixr Establishment</span><br>
-  الرياض، المملكة العربية السعودية · <span>rubixr.studio@gmail.com</span>
+  <div>مؤسسة روبيكسآر · <span>Rubixr Establishment</span> · الرياض، المملكة العربية السعودية</div>
+  <div><a href="privacy.html">سياسة الخصوصية</a> · © ٢٠٢٦</div>
 </footer>
+
+<a class="float-wa" href="https://wa.me/966509199734" aria-label="واتساب"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35M12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88a9.82 9.82 0 0 1 6.99 2.9 9.82 9.82 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.94L.06 24l6.31-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.16-3.49-8.41"/></svg></a>
+
+<script>
+  // ظهور الأقسام مع السكرول
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } }), { threshold: .15 });
+  document.querySelectorAll('.rv').forEach((el, i) => { el.style.transitionDelay = (i % 4) * 90 + 'ms'; io.observe(el); });
+  // القائمة تاخذ خلفية بعد أول نزول
+  const nav = document.querySelector('.nav');
+  addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40), { passive: true });
+  // قائمة الجوال
+  const bg = document.querySelector('.burger');
+  bg.addEventListener('click', () => { const o = document.body.classList.toggle('menu'); bg.setAttribute('aria-expanded', o); });
+  document.querySelectorAll('.mnav a').forEach(a => a.addEventListener('click', () => { document.body.classList.remove('menu'); bg.setAttribute('aria-expanded', 'false'); }));
+  // التذكرة
+  const inp = document.getElementById('pname'), tt = document.getElementById('ttitle'), send = document.getElementById('send'), seat = document.getElementById('seat');
+  inp.addEventListener('input', () => {
+    const v = inp.value.trim();
+    tt.textContent = v || 'اسم مشروعك';
+    seat.textContent = String.fromCharCode(65 + (v.length % 8)) + ((v.length % 9) + 1);
+    if (v) {
+      send.href = 'https://wa.me/966509199734?text=' + encodeURIComponent('السلام عليكم، هذي تذكرة مشروعي: ' + v);
+      send.setAttribute('aria-disabled', 'false');
+    } else { send.href = '#'; send.setAttribute('aria-disabled', 'true'); }
+  });
+</script>
 </body>
 </html>
